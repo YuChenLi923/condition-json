@@ -1,0 +1,7 @@
+*.log
+package-lock.json
+.coveralls.yml
+/coverage
+/.idea
+/node_modules
+

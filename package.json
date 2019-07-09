@@ -1,0 +1,59 @@
+{
+  "name": "condition-json",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/condition-json.min.js",
+  "scripts": {
+    "test": "mocha",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && gulp coveralls",
+    "build": "webpack --config ./build/webpack.prod.config.js && webpack --config ./build/webpack.uglify.config.js"
+  },
+  "author": "YuChenLi923<liyc_code@163.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YuChenLi923/condition-json.git"
+  },
+  "keywords": [
+    "condition-json",
+    "condition",
+    "conditional",
+    "json",
+    "yc"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.24.1",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.7.2",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "glob": "^7.1.2",
+    "gulp": "^3.9.1",
+    "gulp-coveralls": "^0.1.4",
+    "html-webpack-plugin": "^2.30.1",
+    "istanbul": "^0.4.5",
+    "jscoverage": "^0.6.0",
+    "mocha": "^4.1.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "mocha-webpack": "^1.1.0",
+    "uglifyjs-webpack-plugin": "^2.1.3",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-merge": "^4.1.1",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "bugs": {
+    "url": "https://github.com/YuChenLi923/condition-json/issues",
+    "email": "liyc_code@163.com"
+  },
+  "dependencies": {
+    "extend-assign": "0.0.5-c",
+    "lodash": "^4.17.11"
+  }
+}
