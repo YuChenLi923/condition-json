@@ -1,4 +1,10 @@
 # condition-json
+
+[![Build Status](https://www.travis-ci.org/YuChenLi923/condition-json.svg?branch=master)](https://www.travis-ci.org/YuChenLi923/condition-json)
+[![Coverage Status](https://coveralls.io/repos/github/YuChenLi923/condition-json/badge.svg?branch=master)](https://coveralls.io/github/YuChenLi923/condition-json?branch=master)
+![Downloads](http://img.shields.io/npm/dm/condition-json.svg?style=flat)
+![NPM version](https://badge.fury.io/js/condition-json.svg)
+
 拓展json功能,使其key支持条件表达式,condition-json会根据条件,生成对应的json格式。
 
 ## 安装
