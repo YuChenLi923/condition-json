@@ -21,10 +21,14 @@ const json = {
   name: 'yuchen',
   '{showAge}': {
     age: 22
+  },
+  '{showBook}-book': {
+    name: 'book1'
   }
 };
 const result = cjson(json, {
-  showAge: true
+  showAge: true,
+  showBook: true
 });
 ```
 
@@ -33,7 +37,10 @@ result被转换为:
 ```
 {
   name: 'yuchen',
-  age: 22
+  age: 22,
+  book: {
+    name: 'book1'
+  }
 }
 ```
 

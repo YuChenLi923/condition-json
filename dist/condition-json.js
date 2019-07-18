@@ -115,15 +115,38 @@ var _extendAssign2 = _interopRequireDefault(_extendAssign);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var expressionWithKeyReg = /^\{(.*)\}:(.+)/;
+
 function isExpression(key) {
   return key[0] === '{' && key[key.length - 1] === '}';
+}
+
+function isExpressionWithKey(key) {
+  return expressionWithKeyReg.test(key);
+}
+
+function parseExpressionWithKey(key) {
+  var result = expressionWithKeyReg.exec(key);
+  return {
+    key: result[2],
+    expression: result[1]
+  };
 }
 
 function convert(json, scope) {
   var keys = Object.keys(json);
   var newJson = Array.isArray(json) ? [] : {};
   keys.forEach(function (key) {
+    key = key.trim();
     var value = json[key];
+    if (isExpressionWithKey(key)) {
+      var parseRes = parseExpressionWithKey(key);
+      var _result = (0, _expressionParser2.default)(parseRes.expression, scope);
+      if (_result) {
+        newJson[parseRes.key] = (0, _isObject2.default)(value) ? convert(value, scope) : value;
+      }
+      return;
+    }
     if (!isExpression(key)) {
       newJson[key] = (0, _isObject2.default)(value) ? convert(value, scope) : value;
       return;
@@ -134,9 +157,6 @@ function convert(json, scope) {
       return;
     }
     (0, _extendAssign2.default)(newJson, convert(value, scope), true);
-    if (!result) {
-      return;
-    }
     Object.assign(json, value);
   });
   return newJson;

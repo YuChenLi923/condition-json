@@ -55,13 +55,11 @@ describe('test assign', () => {
   it('JSONArray-Example-2', () => {
     const jsonArray = [{
       name: 'Mike',
-      '{!mike.ageSecrecy}': {
-        age: 15
-      }
+      '{mike.ageSecrecy}:age': 14
     }, {
       name: 'Curry',
-      '{!curry.ageSecrecy}': {
-        age: 15
+      '{curry.ageSecrecy}': {
+        type: 'cname'
       }
     }];
     const result = cjson(jsonArray, {
@@ -72,11 +70,9 @@ describe('test assign', () => {
         ageSecrecy: false
       }
     });
-    assert.deepEqual(result, [{
-      name: 'Mike'
-    }, {
-      name: 'Curry',
-      age: 15
-    }]);
+    console.log(result);
+    assert.deepEqual(result[1], {
+      name: 'Curry'
+    });
   });
 });
