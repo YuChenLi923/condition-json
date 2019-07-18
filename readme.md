@@ -22,7 +22,7 @@ const json = {
   '{showAge}': {
     age: 22
   },
-  '{showBook}-book': {
+  '{showBook}:book': {
     name: 'book1'
   }
 };
