@@ -1,7 +1,22 @@
 import expressionParser from './expressionParser';
 import isObject from 'lodash/isObject';
+import isFunction from 'lodash/isFunction';
 import assign from 'extend-assign';
 const expressionWithKeyReg = /^\{(.*)\}:(.+)/;
+
+function handleValue(value, scope) {
+  if (isFunction(value)) {
+    try {
+      return value(scope);
+    } catch (e) {
+      return {};
+    }
+  } else if (isObject(value)) {
+    return convert(value, scope);
+  } else {
+    return value;
+  }
+}
 
 function isExpression(key) {
   return key[0] === '{' && key[key.length - 1] === '}';
@@ -29,12 +44,12 @@ function convert(json, scope) {
       const parseRes = parseExpressionWithKey(key);
       const result = expressionParser(parseRes.expression, scope);
       if (result) {
-        newJson[parseRes.key] = isObject(value) ? convert(value, scope) : value;
+        newJson[parseRes.key] = handleValue(value, scope);
       }
       return;
     }
     if (!isExpression(key)) {
-      newJson[key] = isObject(value) ? convert(value, scope) : value;
+      newJson[key] = handleValue(value, scope);
       return;
     }
     key = key.slice(1, key.length - 1);

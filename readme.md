@@ -24,11 +24,15 @@ const json = {
   },
   '{showBook}:book': {
     name: 'book1'
+  },
+  date: function({date}) {
+    return 'date:' + date;
   }
 };
 const result = cjson(json, {
   showAge: true,
-  showBook: true
+  showBook: true,
+  date: '2019-7'
 });
 ```
 
@@ -40,7 +44,8 @@ result被转换为:
   age: 22,
   book: {
     name: 'book1'
-  }
+  },
+  date: '2019-7'
 }
 ```
 

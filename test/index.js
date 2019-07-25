@@ -53,26 +53,69 @@ describe('test assign', () => {
     assert.deepEqual(result, [1, 2, 3, 4]);
   });
   it('JSONArray-Example-2', () => {
+    const a = {
+      status: 0,
+      msg: '',
+      data: [
+        {
+          name: '男',
+          'value|10000-12000': 1
+        },
+        {
+          name: '女',
+          'value|10000-12000': 1
+        }
+      ],
+      '{header.regionId === \'220113\'}': {
+        '{query.scenicId > 0}:data': [
+          {
+            name: '男',
+            'value|3840-4800': 1
+          },
+          {
+            name: '女',
+            'value|8160-10200': 1
+          }
+        ],
+        '{query.scenicId <= 0}:data': [
+          {
+            name: '男',
+            'value|256000-262400': 1
+          },
+          {
+            name: '女',
+            'value|544000-557600': 1
+          }
+        ]
+      }
+    };
+    console.log(cjson(a, {
+      header: {
+        regionId: '220113'
+      },
+      query: {
+      }
+    }), 99999)
     const jsonArray = [{
       name: 'Mike',
-      '{mike.ageSecrecy}:age': 14
+      '{mike.ageSecrecy}:age|2-4': 14
     }, {
       name: 'Curry',
       '{curry.ageSecrecy}': {
-        type: 'cname'
+        type: function ({mike}) {
+          return mike.age;
+        }
       }
     }];
     const result = cjson(jsonArray, {
       mike: {
-        ageSecrecy: true
+        ageSecrecy: true,
+        age: 2
       },
       curry: {
-        ageSecrecy: false
+        ageSecrecy: true
       }
     });
     console.log(result);
-    assert.deepEqual(result[1], {
-      name: 'Curry'
-    });
   });
 });

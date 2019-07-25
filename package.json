@@ -1,6 +1,6 @@
 {
   "name": "condition-json",
-  "version": "0.0.2-a",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/condition-json.min.js",
   "scripts": {
