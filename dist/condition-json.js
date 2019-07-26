@@ -170,17 +170,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var expressionWithKeyReg = /^\{(.*)\}:(.+)/;
 
-function handleValue(value, scope) {
+function isPromise(promise) {
+  return Object.prototype.toString.call(promise) === '[object Promise]';
+}
+function handleValue(value, scope, newJson, key) {
   if ((0, _isFunction2.default)(value)) {
     try {
-      return value(scope);
+      var valueParse = value(scope);
+      if (isPromise(valueParse)) {
+        valueParse.then(function (result) {
+          newJson[key] = result;
+        });
+      } else {
+        newJson[key] = valueParse;
+      }
     } catch (e) {
-      return {};
+      newJson[key] = {};
     }
   } else if ((0, _isObject2.default)(value)) {
-    return convert(value, scope);
+    newJson[key] = convert(value, scope);
   } else {
-    return value;
+    newJson[key] = value;
   }
 }
 
@@ -210,12 +220,12 @@ function convert(json, scope) {
       var parseRes = parseExpressionWithKey(key);
       var _result = (0, _expressionParser2.default)(parseRes.expression, scope);
       if (_result) {
-        newJson[parseRes.key] = handleValue(value, scope);
+        handleValue(value, scope, newJson, parseRes.key);
       }
       return;
     }
     if (!isExpression(key)) {
-      newJson[key] = handleValue(value, scope);
+      handleValue(value, scope, newJson, key);
       return;
     }
     key = key.slice(1, key.length - 1);
@@ -224,7 +234,6 @@ function convert(json, scope) {
       return;
     }
     (0, _extendAssign2.default)(newJson, convert(value, scope), true);
-    Object.assign(json, value);
   });
   return newJson;
 }

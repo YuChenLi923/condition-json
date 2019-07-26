@@ -89,22 +89,16 @@ describe('test assign', () => {
         ]
       }
     };
-    console.log(cjson(a, {
-      header: {
-        regionId: '220113'
-      },
-      query: {
-      }
-    }), 99999)
     const jsonArray = [{
       name: 'Mike',
       '{mike.ageSecrecy}:age|2-4': 14
     }, {
       name: 'Curry',
       '{curry.ageSecrecy}': {
-        type: function ({mike}) {
-          return mike.age;
-        }
+        type: async function () {
+          return 123;
+        },
+        a: 2
       }
     }];
     const result = cjson(jsonArray, {
@@ -116,6 +110,11 @@ describe('test assign', () => {
         ageSecrecy: true
       }
     });
-    console.log(result);
+    setTimeout(() => {
+      assert.deepEqual(result[1], {
+        name: 'Curry',
+        a: 2
+      });
+    });
   });
 });

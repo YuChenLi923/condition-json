@@ -9,8 +9,7 @@ module.exports = {
       new UglifyJsPlugin({
         uglifyOptions: {
           compress: {
-            drop_debugger: true,
-            drop_console: true
+            drop_debugger: true
           },
           output:{
             comments: false
