@@ -4,28 +4,27 @@ import isFunction from 'lodash/isFunction';
 import assign from 'extend-assign';
 const expressionWithKeyReg = /^\{(.*)\}:(.+)/;
 
-function isPromise(promise) {
-  return Object.prototype.toString.call(promise) === '[object Promise]';
+function isAsyncFunction(func) {
+  return Object.prototype.toString.call(func) === '[object AsyncFunction]';
 }
-function handleValue(value, scope, newJson, key) {
+
+async function handleValue(value, scope, newJson, key) {
   if (isFunction(value)) {
     try {
-      let valueParse = value(scope);
-      if (isPromise(valueParse)) {
-        valueParse.then((result) => {
-          newJson[key] = result;
-        });
+      if (isAsyncFunction(value)) {
+        newJson[key] = await value(scope);
       } else {
-        newJson[key] = valueParse;
+        newJson[key] = value(scope);
       }
     } catch (e) {
       newJson[key] = {};
     }
   } else if (isObject(value)) {
-    newJson[key] = convert(value, scope);
+    newJson[key] = await convert(value, scope);
   } else {
     newJson[key] = value;
   }
+  return true;
 }
 
 function isExpression(key) {
@@ -44,22 +43,22 @@ function parseExpressionWithKey(key) {
   };
 }
 
-function convert(json, scope) {
+async function convert(json, scope) {
   let keys = Object.keys(json);
   let newJson = Array.isArray(json) ? [] : {};
-  keys.forEach((key) => {
+  await Promise.all(keys.map(async (key) => {
     key = key.trim();
     let value = json[key];
     if (isExpressionWithKey(key)) {
       const parseRes = parseExpressionWithKey(key);
       const result = expressionParser(parseRes.expression, scope);
       if (result) {
-        handleValue(value, scope, newJson, parseRes.key);
+        await handleValue(value, scope, newJson, parseRes.key);
       }
       return;
     }
     if (!isExpression(key)) {
-      handleValue(value, scope, newJson, key);
+      await handleValue(value, scope, newJson, key);
       return;
     }
     key = key.slice(1, key.length - 1);
@@ -67,8 +66,9 @@ function convert(json, scope) {
     if (!result || !isObject(value)) {
       return;
     }
-    assign(newJson, convert(value, scope), true);
-  });
+    let childJSON = await convert(value, scope);
+    assign(newJson, childJSON, true);
+  }));
   return newJson;
 }
 

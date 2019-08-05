@@ -29,10 +29,12 @@ const json = {
     return 'date:' + date;
   }
 };
-const result = cjson(json, {
+cjson(json, {
   showAge: true,
   showBook: true,
   date: '2019-7'
+}).then((result) => {
+  console.log(result);
 });
 ```
 

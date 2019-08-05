@@ -13,13 +13,14 @@ describe('test assign', () => {
         weight: 100
       }
     };
-    const result = cjson(json, {
+    cjson(json, {
       type: 'adult'
-    });
-    assert.deepEqual(result, {
-      name: 'mike',
-      height: 175,
-      weight: 100
+    }).then((result) => {
+      assert.deepEqual(result, {
+        name: 'mike',
+        height: 175,
+        weight: 100
+      });
     });
   });
   it('JSON-Example-2', () => {
@@ -34,23 +35,25 @@ describe('test assign', () => {
         }
       }
     };
-    const result = cjson(json, {
+    cjson(json, {
       showAuthor: true
-    });
-    assert.deepEqual(result, {
-      book: {
-        name: 'wow',
-        author: {
-          name: 'yuchenli',
-          age: 22
+    }).then((result) => {
+      assert.deepEqual(result, {
+        book: {
+          name: 'wow',
+          author: {
+            name: 'yuchenli',
+            age: 22
+          }
         }
-      }
+      });
     });
   });
   it('JSONArray-Example-1', () => {
     const jsonArray = [1, 2, 3, 4];
-    const result = cjson(jsonArray);
-    assert.deepEqual(result, [1, 2, 3, 4]);
+    cjson(jsonArray).then((result) => {
+      assert.deepEqual(result, [1, 2, 3, 4]);
+    });
   });
   it('JSONArray-Example-2', () => {
     const a = {
@@ -89,6 +92,13 @@ describe('test assign', () => {
         ]
       }
     };
+    const testPromise = function () {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(1);
+        }, 2000);
+      });
+    };
     const jsonArray = [{
       name: 'Mike',
       '{mike.ageSecrecy}:age|2-4': 14
@@ -96,12 +106,14 @@ describe('test assign', () => {
       name: 'Curry',
       '{curry.ageSecrecy}': {
         type: async function () {
-          return 123;
+          const result = await testPromise();
+          console.log(result);
+          return result;
         },
         a: 2
       }
     }];
-    const result = cjson(jsonArray, {
+    cjson(jsonArray, {
       mike: {
         ageSecrecy: true,
         age: 2
@@ -109,11 +121,11 @@ describe('test assign', () => {
       curry: {
         ageSecrecy: true
       }
-    });
-    setTimeout(() => {
+    }).then((result) => {
       assert.deepEqual(result[1], {
         name: 'Curry',
-        a: 2
+        a: 2,
+        type: 1
       });
     });
   });
