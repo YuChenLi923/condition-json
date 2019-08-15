@@ -104,6 +104,9 @@ describe('test assign', () => {
       '{mike.ageSecrecy}:age|2-4': 14
     }, {
       name: 'Curry',
+      book: function () {
+        return 321;
+      },
       '{curry.ageSecrecy}': {
         type: async function () {
           const result = await testPromise();
@@ -125,8 +128,23 @@ describe('test assign', () => {
       assert.deepEqual(result[1], {
         name: 'Curry',
         a: 2,
-        type: 1
+        type: 1,
+        book: 321
       });
     });
   });
 });
+describe('test function error', () => {
+  it('error', () => {
+    const json = {
+      name: async function() {
+        return a;
+      }
+    };
+    cjson(json, {}, {
+      error: function (e) {
+        console.log(e.message, 1111);
+      }
+    });
+  });
+})

@@ -155,13 +155,13 @@ var _regenerator = __webpack_require__(3);
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var handleValue = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(value, scope, newJson, key) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(value, scope, newJson, key, listener) {
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             if (!(0, _isFunction2.default)(value)) {
-              _context.next = 16;
+              _context.next = 17;
               break;
             }
 
@@ -176,45 +176,47 @@ var handleValue = function () {
             return value(scope);
 
           case 5:
-            newJson[key] = _context.sent;
+            value = _context.sent;
             _context.next = 9;
             break;
 
           case 8:
-            newJson[key] = value(scope);
+            value = value(scope);
 
           case 9:
-            _context.next = 14;
+            _context.next = 15;
             break;
 
           case 11:
             _context.prev = 11;
             _context.t0 = _context['catch'](1);
 
-            newJson[key] = {};
+            value = {};
+            if (listener && typeof listener.error === 'function') {
+              listener.error(_context.t0);
+            }
 
-          case 14:
-            _context.next = 23;
+          case 15:
+            _context.next = 21;
             break;
 
-          case 16:
+          case 17:
             if (!(0, _isObject2.default)(value)) {
-              _context.next = 22;
+              _context.next = 21;
               break;
             }
 
-            _context.next = 19;
+            _context.next = 20;
             return convert(value, scope);
 
-          case 19:
-            newJson[key] = _context.sent;
-            _context.next = 23;
-            break;
+          case 20:
+            value = _context.sent;
 
-          case 22:
+          case 21:
+            if (listener && typeof listener.convert === 'function') {
+              value = listener.convert(value, key);
+            }
             newJson[key] = value;
-
-          case 23:
             return _context.abrupt('return', true);
 
           case 24:
@@ -225,13 +227,13 @@ var handleValue = function () {
     }, _callee, this, [[1, 11]]);
   }));
 
-  return function handleValue(_x, _x2, _x3, _x4) {
+  return function handleValue(_x, _x2, _x3, _x4, _x5) {
     return _ref.apply(this, arguments);
   };
 }();
 
 var convert = function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3(json, scope) {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3(json, scope, listener) {
     var _this = this;
 
     var keys, newJson;
@@ -267,7 +269,7 @@ var convert = function () {
                         }
 
                         _context2.next = 8;
-                        return handleValue(value, scope, newJson, parseRes.key);
+                        return handleValue(value, scope, newJson, parseRes.key, listener);
 
                       case 8:
                         return _context2.abrupt('return');
@@ -279,7 +281,7 @@ var convert = function () {
                         }
 
                         _context2.next = 12;
-                        return handleValue(value, scope, newJson, key);
+                        return handleValue(value, scope, newJson, key, listener);
 
                       case 12:
                         return _context2.abrupt('return');
@@ -312,7 +314,7 @@ var convert = function () {
                 }, _callee2, _this);
               }));
 
-              return function (_x7) {
+              return function (_x9) {
                 return _ref3.apply(this, arguments);
               };
             }()));
@@ -328,7 +330,7 @@ var convert = function () {
     }, _callee3, this);
   }));
 
-  return function convert(_x5, _x6) {
+  return function convert(_x6, _x7, _x8) {
     return _ref2.apply(this, arguments);
   };
 }();
