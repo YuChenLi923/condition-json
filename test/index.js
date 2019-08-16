@@ -137,13 +137,15 @@ describe('test assign', () => {
 describe('test function error', () => {
   it('error', () => {
     const json = {
-      name: async function() {
-        return a;
+      name: {
+        body: async function() {
+          return a;
+        }
       }
     };
     cjson(json, {}, {
-      error: function (e) {
-        console.log(e.message, 1111);
+      error:  (e) => {
+        console.log(e.message, 3213213213);
       }
     });
   });

@@ -23,7 +23,7 @@ async function handleValue(value, scope, newJson, key, listener) {
       }
     }
   } else if (isObject(value)) {
-    value = await convert(value, scope);
+    value = await convert(value, scope, listener);
   }
   if (listener && typeof listener.convert === 'function') {
     value = listener.convert(value, key);
@@ -71,7 +71,7 @@ async function convert(json, scope, listener) {
     if (!result || !isObject(value)) {
       return;
     }
-    let childJSON = await convert(value, scope);
+    let childJSON = await convert(value, scope, listener);
     assign(newJson, childJSON, true);
   }));
   return newJson;

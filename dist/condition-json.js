@@ -207,7 +207,7 @@ var handleValue = function () {
             }
 
             _context.next = 20;
-            return convert(value, scope);
+            return convert(value, scope, listener);
 
           case 20:
             value = _context.sent;
@@ -299,7 +299,7 @@ var convert = function () {
 
                       case 17:
                         _context2.next = 19;
-                        return convert(value, scope);
+                        return convert(value, scope, listener);
 
                       case 19:
                         childJSON = _context2.sent;
